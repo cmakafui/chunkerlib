@@ -52,10 +52,6 @@ class Chunker(object):
         size = self.max_batch_size + 1
         
         for item in self.items:
-            # Returns if maximum number of records exceeded
-            if item_counter == self.max_records:
-                return result
-            item_counter += 1
 
 
             item_size = get_size(item)
@@ -63,10 +59,17 @@ class Chunker(object):
             if item_size > self.max_record_size:
                 continue
 
+            # Increment item counter for max records check
+            item_counter += 1
+
+            # Increment size based on item size
             size += item_size
-            if size > self.max_batch_size:
+
+            # Check for Max Batch Size and Max number of records to split on
+            if size > self.max_batch_size and  item_counter <= self.max_records:
                 result.append([])
                 size = item_size
+                item_counter = 0
             result[-1].append(item)
 
         return result
