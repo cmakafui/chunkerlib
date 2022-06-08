@@ -46,6 +46,7 @@ class Chunker(object):
         :return: The chunked list.
         :rtype: List[List[str]]
         """
+
         result = []
         item_counter = 0
 
@@ -53,8 +54,8 @@ class Chunker(object):
         
         for item in self.items:
 
-
             item_size = get_size(item)
+
             #  larger records should be discarded
             if item_size > self.max_record_size:
                 continue
@@ -66,7 +67,7 @@ class Chunker(object):
             size += item_size
 
             # Check for Max Batch Size and Max number of records to split on
-            if size > self.max_batch_size and  item_counter <= self.max_records:
+            if size > self.max_batch_size or item_counter >= self.max_records:
                 result.append([])
                 size = item_size
                 item_counter = 0
