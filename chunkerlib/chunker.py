@@ -30,9 +30,9 @@ class Chunker(object):
         :type max_records: Optional[int]
         """
         self.items = items
-        self.max_record_size = max_record_size
-        self.max_batch_size = max_batch_size
-        self.max_records = max_records
+        self.max_record_size = max_record_size if max_record_size <= Chunker.MAX_RECORD_SIZE else Chunker.MAX_RECORD_SIZE
+        self.max_batch_size = max_batch_size if max_batch_size <= Chunker.MAX_BATCH_SIZE else Chunker.MAX_BATCH_SIZE
+        self.max_records = max_records if max_records <= Chunker.MAX_RECORDS else Chunker.MAX_RECORDS
 
 
     def __repr__(self) -> str:
@@ -49,7 +49,7 @@ class Chunker(object):
         result = []
         item_counter = 0
 
-        size = Chunker.MAX_BATCH_SIZE + 1
+        size = self.max_batch_size + 1
         
         for item in self.items:
             # Returns if maximum number of records exceeded
